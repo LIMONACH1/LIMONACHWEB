@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <title>موقع LIMONACH</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    body {
+      font-family: Tahoma, sans-serif;
+      direction: rtl;
+      background-color: #f7f7f7;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    header {
+      background-color: #27ae60;
+      color: white;
+      padding: 15px;
+      font-size: 20px;
+    }
+    .container {
+      margin: 20px;
+    }
+    .box {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #ddd;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+    .tasks-content {
+      display: none;
+      margin-top: 10px;
+    }
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    input[type="text"] {
+      padding: 8px;
+      margin-top: 15px;
+      width: 80%;
+      max-width: 300px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    عدد نقاطك: <span id="points">0</span>
+  </header>
+
+  <div class="container">
+    <div class="box">
+      <h2>📰 أخبار الموقع</h2>
+      <p>مرحبًا بك! هذه أول نسخة من موقع LIMONACH. تم تحسينه ليشتغل مع Telegram Web App 🎯</p>
+    </div>
+
+    <div class="box">
+      <h2>🎯 مهمات</h2>
+      <button onclick="toggleTasks()">عرض المهمات</button>
+      <div id="tasks" class="tasks-content">
+        <p>شاهد فيديو واربح 50 نقطة!</p>
+        <p style="color:red;">⚠️ الإعلانات غير مفعّلة حاليًا. سيتم تفعيلها بعد رفع الموقع.</p>
+        <button onclick="earnPoints()">🔁 اضغط هنا بعد مشاهدة الفيديو</button>
+      </div>
+    </div>
+
+    <div class="box">
+      <h3>📌 Telegram ID الخاص بك:</h3>
+      <input type="text" id="telegramID" placeholder="جاري جلب ID من تيليجرام..." disabled />
+    </div>
+  </div>
+
+  <script>
+    // تحميل النقاط من التخزين
+    let points = localStorage.getItem("points") || 0;
+    document.getElementById("points").textContent = points;
+
+    function toggleTasks() {
+      const tasks = document.getElementById("tasks");
+      tasks.style.display = tasks.style.display === "none" ? "block" : "none";
+    }
+
+    function earnPoints() {
+      points = parseInt(points) + 50;
+      document.getElementById("points").textContent = points;
+      localStorage.setItem("points", points);
+      alert("✅ تم إضافة 50 نقطة!");
+    }
+
+    // جلب Telegram ID تلقائيًا من Telegram WebApp
+    window.onload = function () {
+      if (window.Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe) {
+        const tg = Telegram.WebApp;
+        const userID = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : null;
+        if (userID) {
+          localStorage.setItem("telegramID", userID);
+          const input = document.getElementById("telegramID");
+          input.value = userID;
+          input.disabled = true;
+        } else {
+          document.getElementById("telegramID").value = "❌ لم يتم الحصول على ID";
+        }
+      } else {
+        document.getElementById("telegramID").value = "❌ Telegram WebApp غير مدعوم";
+      }
+    };
+  </script>
+</body>
+</html>
