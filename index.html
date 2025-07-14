@@ -105,3 +105,16 @@
   </script>
 </body>
 </html>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+window.onload = function () {
+  if (window.Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe) {
+    const tg = Telegram.WebApp;
+    const userID = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : null;
+    if (userID) {
+      // حفظه في localStorage
+      localStorage.setItem("telegramID", userID);
+      document.getElementById("telegramID").value = userID;
+      document.getElementById("telegramID").disabled = true;
+    }
+  }
+};
